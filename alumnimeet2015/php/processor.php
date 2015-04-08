@@ -34,12 +34,6 @@
 	$finalcourse = htmlspecialchars($course, ENT_QUOTES, 'UTF-8');
 
 	$payment_status = 'Pending';
-	
-	if(!CSRF::check('section_register')){
-        echo $lang['processor_wrong_security_token'];
-    } else {
-		// echo "hello";
-    }
 
     $sqlcheckduplicate = mysql_query("SELECT * FROM `jbims_alumnimeet2015`.`registration_details` WHERE `email_id` = '".mysql_real_escape_string($finalemail)."'");
     $duplicatecount = mysql_num_rows($sqlcheckduplicate);
@@ -51,10 +45,10 @@
 
     if($finalspousename !== '') {
     	$number_of_people = 2;
-    	$payment_amount = 4000;
+    	$payment_amount = 10;
     } else {
     	$number_of_people = 1;
-    	$payment_amount = 2000;
+    	$payment_amount = 5;
     }
 
     if ($mysql == true){

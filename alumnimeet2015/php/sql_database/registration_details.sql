@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2015 at 09:46 PM
+-- Generation Time: Apr 08, 2015 at 08:16 PM
 -- Server version: 5.6.15-log
 -- PHP Version: 5.5.8
 
@@ -37,9 +37,10 @@ CREATE TABLE IF NOT EXISTS `registration_details` (
   `course_attended` varchar(255) NOT NULL,
   `number_of_people` int(11) NOT NULL,
   `payment_amount` int(11) NOT NULL,
+  `transaction_id` varchar(255) NOT NULL,
   `payment_status` varchar(255) NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

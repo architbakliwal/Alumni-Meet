@@ -1,8 +1,8 @@
 <?php
-    
-	include dirname(__FILE__).'/php/csrf_protection/csrf-token.php';
-	include dirname(__FILE__).'/php/csrf_protection/csrf-class.php';
-	
+	if(!isset($_SESSION)){
+    	session_start();
+	}
+    	
 	include dirname(__FILE__).'/php/config/config.php';
 	
 	$language = array('en' => 'en','pt' => 'pt');
@@ -23,6 +23,38 @@
     </head>
 	
     <body>
+    	<?php
+    		$count_ppl = 0;
+    		$sqldetails = "SELECT * FROM  `registration_details`";
+
+			$selectdetails = mysql_query($sqldetails);
+
+			if(! $selectdetails )
+			{
+			  die('Could not enter data: ' . mysql_error());
+			}
+
+			while ($row = mysql_fetch_array($selectdetails, MYSQL_ASSOC)) {
+				$number_of_people = $row['number_of_people'];
+				$count_ppl = $count_ppl + $number_of_people;
+			}
+
+			if($count_ppl >= 1000) {
+				echo "<script>
+						jQuery(document).ready(function() {
+							swal({
+                                title: 'Registrations are closed.',
+                                type: 'info',
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                allowOutsideClick: false,
+                                animation: false
+                            });
+							jQuery('#section_register').hide();
+						});
+					</script>";
+			}
+    	?>
         <div class="wrapper"> 
 		    <div class="form-bar">
 				<div class="top-bar bar-green"></div>
@@ -40,7 +72,7 @@
 						<img src="images/logo.JPG"/>
 					</div>
 			    	<div class="column-twelve">
-						<h2>Autonomous JBIMS Golden Jubilee Function for Alumni Registration</h2>
+						<h2>JBIMS Autonomy and Anniversary Event Program Registration</h2>
 					</div>
 				</div>
 			</div>
@@ -58,11 +90,6 @@
 							<form method="post" action="<?php echo $baseurl;?>php/processor.php?lang=<?php echo $_GET['lang'];?>" id="section_register">
 								<fieldset>
 									<div class="grid-container">
-										<div class="column-twelve">
-									        <div class="input-group">
-		                                        <?php echo CSRF::make('section_register')->protect(); ?>                               
-											</div>
-									    </div>
 										<div class="column-six">
 											<div class="input-group-right irequire">
 												<label for="name" class="group label-input">

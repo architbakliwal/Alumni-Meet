@@ -16,7 +16,7 @@
 	
 	if ($mysql == true){
 
-		$sqldetails = "SELECT * FROM  `registration_details` WHERE uid ='" . $uid ."'";
+		$sqldetails = "SELECT * FROM  `registration_details` WHERE `uid` = " . $uid;
 
 		$selectdetails = mysql_query($sqldetails);
 
@@ -25,17 +25,16 @@
 		  die('Could not enter data: ' . mysql_error());
 		}
 
-		while ($row = mysql_fetch_array($selectpersonal, MYSQL_ASSOC)) {
+		while ($row = mysql_fetch_array($selectdetails, MYSQL_ASSOC)) {
 			$name = $row['name'];
 			$email_id = $row['email_id'];
 			$payment_amount = $row['payment_amount'];
 			$uid = $row['uid'];
 		}
 
-		// $payment_amount = $payment_amount + ($payment_amount * (0.95506/100));
+		$payment_amount = $payment_amount + ($payment_amount * (0.95506/100));
 
-		// $payment_amount = round($payment_amount, 2);
-
+		$payment_amount = round($payment_amount, 2);
 
 	} else {
 		redirect($baseurl);
@@ -70,7 +69,7 @@ include("Sfa/PGReserveData.php");
 
 
 
-$oMerchant->setMerchantDetails("00012849","00012849","00012849","193.545.34.33",rand()."","Ord123","http://jbims.edu/alumnimeet2015/payment/SFAResponse.php","POST","INR","INV123","req.Sale",$payment_amount,"","Ext1","true","Ext3","Ext4","Ext5");
+$oMerchant->setMerchantDetails("00012849","00012849","00012849","193.545.34.33",rand()."","Ord123",$baseurl."payment/SFAResponse.php","POST","INR","INV123","req.Sale",$payment_amount,"","Ext1","true","Ext3","Ext4","Ext5");
 
  $oBTA->setAddressDetails ("CID","Tester","JBIMS","Mumbai","Maharashtra","Test","Test","Test","IND","web@jbims.edu");
 

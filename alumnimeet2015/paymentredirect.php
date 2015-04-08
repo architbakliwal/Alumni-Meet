@@ -1,8 +1,7 @@
 <?php
-session_start();
-
-	include 'php/csrf_protection/csrf-token.php';
-	include 'php/csrf_protection/csrf-class.php';
+	if(!isset($_SESSION)){
+    	session_start();
+	}
 
 	include 'php/config/config.php';
 	
@@ -24,7 +23,7 @@ session_start();
 	$finalpaymentstatus = '';
 
 	if ($mysql == true){
-		$sqldetails = "SELECT * FROM  `registration_details` WHERE uid ='" . $uid ."'";
+		$sqldetails = "SELECT * FROM  `registration_details` WHERE uid = " . $uid;
 
 		$selectdetails = mysql_query($sqldetails);
 
@@ -33,10 +32,11 @@ session_start();
 		  die('Could not enter data: ' . mysql_error());
 		}
 
-		while ($row = mysql_fetch_array($selectpersonal, MYSQL_ASSOC)) {
+		while ($row = mysql_fetch_array($selectdetails, MYSQL_ASSOC)) {
 			$name = $row['name'];
 			$email_id = $row['email_id'];
 			$payment_amount = $row['payment_amount'];
+			$finalpaymentstatus = $row['payment_status'];
 			$uid = $row['uid'];
 		}
 
@@ -46,15 +46,15 @@ session_start();
 
 
 	if($finalpaymentstatus == "Complete") {
-		$responsemsg = '<font color="green">CONGRATULATIONS! Your registration was successful. Please check your mail for payment receipt and confirmation.</font>';
+		$responsemsg = '<font color="green">Congratulations! You are successfully registered</font>';
 		$finalsubject = 'JBIMS Alumni Meet 2015 Confirmation';
 	} else {
-		$responsemsg = '<font color="red">Your payment was not successful, please try again or contact support. Please check your mail for transaction id.</font>';
-		$finalsubject = 'JBIMS Alumni Meet 2015 Confirmation';
+		$responsemsg = '<font color="red">Your payment was not successful, please try again or contact support.</font>';
+		$finalsubject = 'JBIMS Alumni Meet 2015 Payment Receipt';
 	}
 
 	include 'php/classes/PHPMailerAutoload.php';							
-	include 'php/messages/autopaymentemail.php';
+	include 'php/messages/automessagesubmit.php';
 												
 	$automail = new PHPMailer();
 	$automail->IsSMTP();
@@ -74,11 +74,34 @@ session_start();
 	$automail->ContentType = "text/html";
 	$automail->AddAddress($email_id);
 	$automail->Subject = $finalsubject;
-	$automail->Body = $autopaymentemail;
+	$automail->Body = $automessagesubmit;
 	$automail->AltBody = "To view this message, please use an HTML compatible email";
 						
 	if ($automail->Send()) {
 	} else {
+	}
+
+	function redirect($url) {
+
+		if(headers_sent()) {
+
+		?>
+		<html><head>
+		<script language="javascript" type="text/javascript">
+
+		window.self.location='<?php print($url);?>';
+
+		</script>
+		</head></html>
+		<?php
+		exit;
+
+		} else {
+
+		header("Location: ".$url);
+		exit;
+
+		}
 	}
 	
 	
@@ -106,7 +129,7 @@ session_start();
 	        <div class="header dashboard_header">
 			    <div class="grid-container">
 			    	<div class="column-twelve">
-						<h4>Autonomous JBIMS Golden Jubilee Function for Alumni Registration</h4>
+						<h4>JBIMS Autonomy and Anniversary Event Program Registration</h4>
 					</div>					
 				</div>
 			</div>

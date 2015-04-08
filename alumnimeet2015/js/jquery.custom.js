@@ -12,7 +12,7 @@ var emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-
 
 jQuery.noConflict()(function($) {
     $(document).ready(function() {
-        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+        // $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
         $('input, select').each(function(index, element) {
             $(this).attr('title', $(this).attr('placeholder'));
@@ -79,9 +79,11 @@ jQuery.noConflict()(function($) {
             submitHandler: function(form) {
                 jQuery(form).ajaxSubmit({
                     beforeSubmit: function() {
+                        $.blockUI();
                         $('#save-button').attr('disabled', 'disabled');
                     },
                     success: function(response) {
+                        $.unblockUI();
                         if (response === 'duplicate') {
                             swal({
                                 title: "Error!",
