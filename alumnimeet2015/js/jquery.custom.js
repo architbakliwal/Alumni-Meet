@@ -1,17 +1,19 @@
 /*
-    Description: 	Form Framework Pro
-    Author: 		InsideLab
-    Version: 		1.0
+    Description:    Form Framework Pro
+    Author:         InsideLab
+    Version:        1.0
 */
 
-/*	--------------------------------------------------
-	:: Event Form
-	-------------------------------------------------- */
+/*  --------------------------------------------------
+    :: Event Form
+    -------------------------------------------------- */
 
 var emailregex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 jQuery.noConflict()(function($) {
     $(document).ready(function() {
+        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
         $('input, select').each(function(index, element) {
             $(this).attr('title', $(this).attr('placeholder'));
         });
@@ -56,7 +58,8 @@ jQuery.noConflict()(function($) {
                     required: true
                 },
                 batchyear: {
-                    required: true
+                    required: true,
+                    number: true
                 },
                 course: {
                     required: true
@@ -78,7 +81,15 @@ jQuery.noConflict()(function($) {
                     beforeSubmit: function() {
                         $('#save-button').attr('disabled', 'disabled');
                     },
-                    success: function() {
+                    success: function(response) {
+                        if (response === 'duplicate') {
+                            swal({
+                                title: "Error!",
+                                text: "This email already exist in our Database.",
+                                type: "error",
+                                animation: false
+                            });
+                        }
                         $('#save-button').removeAttr('disabled');
                         $('#section_register').each(function() {
                             this.reset();

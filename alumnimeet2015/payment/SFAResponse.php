@@ -3,7 +3,7 @@ include("Sfa/EncryptionUtil.php");
 include '../php/config/config.php';
 
  $strMerchantId="00012849";
- $astrFileName="/var/www/vhosts/jbims.edu/public_html/admission/payment/00012849.key";
+ $astrFileName="/var/www/vhosts/jbims.edu/public_html/alumnimeet2015/payment/00012849.key";
  $astrClearData;
  $ResponseCode = "";
  $Message = "";
@@ -26,7 +26,7 @@ include '../php/config/config.php';
 if($_POST){
 
     if($_POST['DATA']==null){
-        redirect('http://jbims.edu/admission/admin/paymentredirect.php');
+        redirect($baseurl . 'paymentredirect.php');
     }
                  
     $astrResponseData=$_POST['DATA'];
@@ -101,32 +101,21 @@ if($_POST){
             $finalpaymentstatus = 'Failed';
          }
 
-         $finalpaymentamount = $Reserve4;
-         $finalapplicationid = $Reserve1;
+         $uid = trim($Reserve4);
+         $email_id = $Reserve2;
 
          if ($mysql == true){
-            $sqlpayment = "INSERT INTO `jbims_admission`.`users_payment_details` (`application_id`, `dd_reference_number`, `payment_amount`, `payment_status`) VALUES (
-                '".mysql_real_escape_string($finalapplicationid)."',
-                '".mysql_real_escape_string($TxnID)."',
-                '".mysql_real_escape_string($finalpaymentamount)."',
-                '".mysql_real_escape_string($finalpaymentstatus)."'
-                ) 
-            ON DUPLICATE KEY 
-            UPDATE
-            dd_reference_number = VALUES(dd_reference_number),
-            payment_amount = VALUES(payment_amount),
-            payment_status = VALUES(payment_status)
-            ;";
+            $sqlpayment = "UPDATE `registration_details` SET `payment_status` = ".$finalpaymentstatus.", `transaction_id` = ".$TxnID." WHERE `uid` = ". $uid;
 
-            $insertpayment = mysql_query($sqlpayment);
+            $updatepayment = mysql_query($sqlpayment);
 
-            if(! $insertpayment )
+            if(! $updatepayment )
             {
               die('Could not enter data: ' . mysql_error());
             }
 
             echo "success";
-            redirect('http://jbims.edu/admission/admin/paymentredirect.php');
+            redirect($baseurl . 'paymentredirect.php?uid=' .$uid);
 
         } else {
 

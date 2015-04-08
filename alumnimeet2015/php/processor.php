@@ -32,10 +32,84 @@
     $finalphonenumber = htmlspecialchars($phonenumber, ENT_QUOTES, 'UTF-8');
 	$finalbatchyear = htmlspecialchars($batchyear, ENT_QUOTES, 'UTF-8');
 	$finalcourse = htmlspecialchars($course, ENT_QUOTES, 'UTF-8');
+
+	$payment_status = 'Pending';
 	
 	if(!CSRF::check('section_register')){
         echo $lang['processor_wrong_security_token'];
     } else {
-		echo "hello";
-    }	
+		// echo "hello";
+    }
+
+    $sqlcheckduplicate = mysql_query("SELECT * FROM `jbims_alumnimeet2015`.`registration_details` WHERE `email_id` = '".mysql_real_escape_string($finalemail)."'");
+    $duplicatecount = mysql_num_rows($sqlcheckduplicate);
+
+    if($duplicatecount > 0) {
+    	echo 'duplicate';
+    	exit(0);
+    }
+
+    if($finalspousename !== '') {
+    	$number_of_people = 2;
+    	$payment_amount = 4000;
+    } else {
+    	$number_of_people = 1;
+    	$payment_amount = 2000;
+    }
+
+    if ($mysql == true){
+
+		$sqlregister = "INSERT INTO `jbims_alumnimeet2015`.`registration_details` (`name`, `spouse_name`, `address`, `email_id`,`phone_number`, `batch_year`, `course_attended`, `number_of_people`, `payment_amount`, `payment_status`) VALUES ('".mysql_real_escape_string($finalname)."','".mysql_real_escape_string($finalspousename)."','".mysql_real_escape_string($finaladdress)."','".mysql_real_escape_string($finalemail)."','".mysql_real_escape_string($finalphonenumber)."','".mysql_real_escape_string($finalbatchyear)."','".mysql_real_escape_string($finalcourse)."','".mysql_real_escape_string($number_of_people)."','".mysql_real_escape_string($payment_amount)."','".mysql_real_escape_string($payment_status)."')";
+
+		$insertregister = mysql_query($sqlregister);
+
+		if(! $insertregister )
+		{
+		  die('Could not enter data: ' . mysql_error());
+		}
+
+		$sqluid = "SELECT * FROM  `registration_details` WHERE email_id ='" . mysql_real_escape_string($finalemail) ."'";
+
+		$selectuid = mysql_query($sqluid);
+
+		if(! $selectuid )
+		{
+		  die('Could not enter data: ' . mysql_error());
+		}
+
+	    while ($row = mysql_fetch_array($selectuid, MYSQL_ASSOC)) {
+	        $uid = $row['uid'];
+	    }
+
+	    redirect($baseurl. 'payment/TestSsl.php?uid=' .$uid);
+		
+	}
+
+
+
+
+
+function redirect($url) {
+
+	if(headers_sent()) {
+
+	?>
+	<html><head>
+	<script language="javascript" type="text/javascript">
+
+	window.self.location='<?php print($url);?>';
+
+	</script>
+	</head></html>
+	<?php
+	exit;
+
+	} else {
+
+	header("Location: ".$url);
+	exit;
+
+	}
+}
+
 ?>
