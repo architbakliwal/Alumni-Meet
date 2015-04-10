@@ -45,10 +45,10 @@
 
     if($finalspousename !== '') {
     	$number_of_people = 2;
-    	$payment_amount = 10;
+    	$payment_amount = 4000;
     } else {
     	$number_of_people = 1;
-    	$payment_amount = 5;
+    	$payment_amount = 2000;
     }
 
     if ($mysql == true){
@@ -75,8 +75,11 @@
 	        $uid = $row['uid'];
 	    }
 
-	    redirect($baseurl. 'payment/TestSsl.php?uid=' .$uid);
-		
+	    if($uid !== '') {
+	    	echo $uid;
+	    } else {
+	    	echo "Failed";
+	    }		
 	}
 
 

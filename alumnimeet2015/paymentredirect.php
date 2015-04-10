@@ -38,23 +38,27 @@
 			$payment_amount = $row['payment_amount'];
 			$finalpaymentstatus = $row['payment_status'];
 			$uid = $row['uid'];
+			$transaction_id = $row['transaction_id'];
 		}
 
 	} else {
 		redirect($baseurl);
 	}
 
+	include 'php/classes/PHPMailerAutoload.php';							
+	include 'php/messages/automessagesubmit.php';
+	include 'php/messages/autopaymentemail.php';
+
 
 	if($finalpaymentstatus == "Complete") {
 		$responsemsg = '<font color="green">Congratulations! You are successfully registered</font>';
 		$finalsubject = 'JBIMS Alumni Meet 2015 Confirmation';
+		$messagebody = $automessagesubmit;
 	} else {
 		$responsemsg = '<font color="red">Your payment was not successful, please try again or contact support.</font>';
 		$finalsubject = 'JBIMS Alumni Meet 2015 Payment Receipt';
+		$messagebody = $autopaymentemail;
 	}
-
-	include 'php/classes/PHPMailerAutoload.php';							
-	include 'php/messages/automessagesubmit.php';
 												
 	$automail = new PHPMailer();
 	$automail->IsSMTP();
@@ -74,7 +78,7 @@
 	$automail->ContentType = "text/html";
 	$automail->AddAddress($email_id);
 	$automail->Subject = $finalsubject;
-	$automail->Body = $automessagesubmit;
+	$automail->Body = $messagebody;
 	$automail->AltBody = "To view this message, please use an HTML compatible email";
 						
 	if ($automail->Send()) {
@@ -129,7 +133,7 @@
 	        <div class="header dashboard_header">
 			    <div class="grid-container">
 			    	<div class="column-twelve">
-						<h4>JBIMS Autonomy and Anniversary Event Program Registration</h4>
+						<h4>JBIMS Autonomy & Golden Jubilee Celebrations Alumni Event Registration</h4>
 					</div>					
 				</div>
 			</div>

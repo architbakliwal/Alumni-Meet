@@ -72,7 +72,7 @@
 						<img src="images/logo.JPG"/>
 					</div>
 			    	<div class="column-twelve">
-						<h2>JBIMS Autonomy and Anniversary Event Program Registration</h2>
+						<h2>JBIMS Autonomy & Golden Jubilee Celebrations Alumni Event Registration</h2>
 					</div>
 				</div>
 			</div>

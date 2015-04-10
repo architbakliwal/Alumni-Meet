@@ -43,6 +43,8 @@ jQuery.noConflict()(function($) {
         $("textarea").attr('maxlength', 2000);
 
         $('#section_register').validate({
+            onfocusout: false,
+            onkeyup: false,
             rules: {
                 name: {
                     required: true,
@@ -83,14 +85,24 @@ jQuery.noConflict()(function($) {
                         $('#save-button').attr('disabled', 'disabled');
                     },
                     success: function(response) {
-                        $.unblockUI();
                         if (response === 'duplicate') {
+                            $.unblockUI();
                             swal({
                                 title: "Error!",
                                 text: "This email already exist in our Database.",
                                 type: "error",
                                 animation: false
                             });
+                        } else if (response === 'Failed') {
+                            $.unblockUI();
+                            swal({
+                                title: "Error!",
+                                text: "Please try again",
+                                type: "error",
+                                animation: false
+                            });
+                        } else {
+                            window.location = "http://jbims.edu/alumnimeet2015/payment/TestSsl.php?uid=" + response;
                         }
                         $('#save-button').removeAttr('disabled');
                         $('#section_register').each(function() {

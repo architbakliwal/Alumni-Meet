@@ -23,6 +23,14 @@ include '../php/config/config.php';
  $Reserve9 = "";
  $Reserve10 = "";
 
+ // $finalpaymentstatus = 'Complete';
+ // $TxnID= "2323a";
+ // $uid=12;
+
+ // $sqlpayment = "UPDATE registration_details SET payment_status = '" . $finalpaymentstatus . "', transaction_id = '" . $TxnID . "' WHERE uid = " . $uid;
+
+ // print $sqlpayment;
+
 if($_POST){
 
     if($_POST['DATA']==null){
@@ -105,7 +113,7 @@ if($_POST){
          $email_id = $Reserve2;
 
          if ($mysql == true){
-            $sqlpayment = "UPDATE `registration_details` SET `payment_status` = ".$finalpaymentstatus.", `transaction_id` = ".$TxnID." WHERE `uid` = ". $uid;
+            $sqlpayment = "UPDATE registration_details SET payment_status = '" . $finalpaymentstatus . "', transaction_id = '" . $TxnID . "' WHERE uid = " . $uid;
 
             $updatepayment = mysql_query($sqlpayment);
 
