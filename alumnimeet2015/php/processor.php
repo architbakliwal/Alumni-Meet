@@ -39,8 +39,8 @@
     $duplicatecount = mysql_num_rows($sqlcheckduplicate);
 
     if($duplicatecount > 0) {
-    	echo 'duplicate';
-    	exit(0);
+    	// echo 'duplicate';
+    	// exit(0);
     }
 
     if($finalspousename !== '') {

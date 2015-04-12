@@ -25,7 +25,7 @@
     <body>
     	<?php
     		$count_ppl = 0;
-    		$sqldetails = "SELECT * FROM  `registration_details`";
+    		$sqldetails = "SELECT * FROM  `registration_details` WHERE `payment_status` = 'Complete'";
 
 			$selectdetails = mysql_query($sqldetails);
 
